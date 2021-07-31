@@ -1,0 +1,122 @@
+﻿@page "/UdtRobo"
+@using Rob_master.Models;
+@using Rob_master.Data;
+<h3>Ingresar id para actualizar Robo</h3>
+<div class="row">
+    <div class="col-md-9">
+        <input @bind="@id" type="number" class="form-control" placeholder="Id del robo"/>
+    </div>
+    <div class="col-md-3">
+        <button @onclick="@Next" class="btn btn-success"><span class="oi oi-magnifying-glass" aria-hidden="true"></span>Siguiente</button>
+    </div>
+</div>
+<br />
+<div class="card p-4">
+    <h4>Actualizar un robo</h4>
+    <div class="form-group">
+        <label><b>Cedula querellante</b></label>
+        <br />
+        <input @bind="cedula" class="form-control" placeholder="Example: 40233211958" maxlength="11" />
+    </div>
+    <div class="form-group">
+        <label><b>Nombre completo</b></label>
+        <br />
+        <input @bind="nombre" class="form-control" placeholder="Nombre" />
+    </div>
+    <div class="form-group">
+        <label><b>Detalle del robo</b></label>
+        <br />
+        <input @bind="desc" class="form-control" placeholder="Que se robaron" />
+    </div>
+    <div class="form-group">
+        <label><b>Valor en $RD</b></label>
+        <br />
+        <input @bind="valor" class="form-control" placeholder="Valor en $RD" />
+    </div>
+    <div class="form-group">
+        <label><b>Lugar del hecho</b></label>
+        <br />
+        <input @bind="lugar" class="form-control" placeholder="Lugar del hecho" />
+    </div>
+    <div class="form-group">
+        <label><b>Latitud en decimales</b></label>
+        <br />
+        <input @bind="lat" class="form-control" placeholder="Latitud" />
+    </div>
+    <div class="form-group">
+        <label><b>Longitud en decimales</b></label>
+        <br />
+        <input @bind="lon" class="form-control" placeholder="Longitud" />
+    </div>
+    <br /> 
+@if (ok)
+{
+     <div class="form-group" style="align-content: center">
+         <button @onclick="Update" class="btn btn-primary">Actualizar Robo</button>
+     </div>
+}
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+        <div>
+            <b>@message</b>
+        </div>
+    </div>
+</div>
+
+@code {
+    int? id;
+    Denuncias querella = new Denuncias();
+    robosContext db = new robosContext();
+    Dataprocess exe = new Dataprocess();
+    bool ok = false;
+    string cedula, nombre, desc, lugar, message;
+    double? lat, lon, valor;
+
+    public void Next()
+    {
+        try
+        {
+            message = "";
+            var query = from r in db.Denuncias
+                        where r.Id == id
+                        select r;
+            Denuncias registro = query.First();
+            cedula = registro.Cedula;
+            nombre = registro.Nombre;
+            desc = registro.Descripcion;
+            valor = registro.Valor;
+            lugar = registro.Lugar;
+            lat = registro.Latitud;
+            lon = registro.Longitud;
+            ok = true;
+        }
+        catch (Exception)
+        {
+
+            message = "Id incorrecto...";
+        }
+
+    }
+    public void Update()
+    {
+        try
+        {
+            message = "";
+            querella.Id = id;
+            querella.Cedula = cedula;
+            querella.Nombre = nombre;
+            querella.Descripcion = desc;
+            querella.Valor = valor;
+            querella.Lugar = lugar;
+            querella.Latitud = lat;
+            querella.Longitud = lon;
+
+            exe.UpdateRobo(querella);
+            message = "Robo actualizado con exito";
+        }
+        catch (Exception)
+        {
+
+            message = "No fue posible actualizar el registro...";
+        }
+    }
+}

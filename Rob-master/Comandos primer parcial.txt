@@ -1,0 +1,38 @@
+////// PREFERIBLEMENTE POWERSHELL ////////////
+Ir al directorio donde queremos crear el proyecto, generalmente el escritorio, pa' ma rapido:
+-- cd Desktop --
+
+Crear el directorio:
+-- mkdir Nombre_de_la_carpeta --
+
+Ir al directorio creado jiji:
+-- cd Nombre_de_la_carpeta --
+
+Por si acaso instala entityframework:
+-- dotnet tool install --global dotnet-ef --
+
+Creamos nuestro proyecto
+-- dotnet new blazorserver -o "Nombre_del_proyecto" --
+
+Entramos al directorio del proyecto creado
+-- cd Nombre_del_proyecto --
+
+///////// INSTALAR O AÑADIR DEPENDENCIAS AL PROYECTO /////////
+-- dotnet add package Microsoft.EntityFrameworkCore.Relational -v 3.1.12 --
+
+-- dotnet add package Microsoft.EntityFrameworkCore.SqlServer -v 3.1.12 --
+
+-- dotnet add package Microsoft.EntityFrameworkCore.Tools -v 3.1.12 --
+
+-- dotnet add package Microsoft.EntityFrameworkCore.Design -v 3.1.12 --
+
+-- dotnet add package Pomelo.EntityFrameworkCore.MySql -v 3.2.4 --
+
+//////// COMANDO DE POMELO PARA MIGRAR //////////
+-- dotnet ef dbcontext scaffold "server=localhost;uid=root;pwd=;database=robos" Pomelo.EntityFrameworkCore.MySql --output-dir Models --force
+
+
+18.47186, -69.89232
+18.42733, -68.97285
+18.311683516138295, -70.3082198476562
+

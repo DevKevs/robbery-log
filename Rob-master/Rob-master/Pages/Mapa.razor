@@ -1,0 +1,33 @@
+﻿@page "/Mapa"
+@using Rob_master.Models;
+<h3>Mapa</h3>
+<div class="row">
+    <h5>Posicion seleccionada: @clickedPosition</h5>
+    <div class="col-lg-12">
+        <RadzenGoogleMap Style="height:600px;" Zoom="@zoom" Center="@(new GoogleMapPosition() { Lat= 18.735693, Lng= -70.162651})" MapClick="@OnMapClick">
+            <Markers>
+                @foreach (var i in casos)
+                {
+                    <RadzenGoogleMapMarker Title="Robos en RD" Label="Rep. Dom" Position="@(new GoogleMapPosition(){Lat= Convert.ToDouble(i.Latitud), Lng = Convert.ToDouble(i.Longitud)})" />
+                }
+            </Markers>
+        </RadzenGoogleMap>
+    </div>
+</div>
+
+
+    @code {
+        int zoom = 8;
+        string clickedPosition = "";
+        List<Denuncias> casos = new List<Denuncias>();
+        robosContext db = new robosContext();
+        protected override void OnInitialized()
+        {
+            casos = db.Denuncias.ToList();
+        }
+
+        void OnMapClick(GoogleMapClickEventArgs args)
+        {
+            clickedPosition = $"Latitud: {args.Position.Lat}, Longitud: {args.Position.Lng}";
+        }
+    }

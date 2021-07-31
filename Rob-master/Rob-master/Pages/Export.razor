@@ -1,0 +1,58 @@
+﻿@page "/Export"
+@using Rob_master.Models;
+@using Rob_master.Data;
+<h3>Export</h3>
+<div class="row">
+    <div class="col-md-9">
+        <input @bind="@cedula" type="number" class="form-control" placeholder="cedula del querellante a exportar" />
+    </div>
+    <div class="col-md-3">
+        <button @onclick="@Next" class="btn btn-success"><span class="oi oi-magnifying-glass" aria-hidden="true"></span>Exportar</button>
+    </div>
+</div>
+<br />
+@if (preview)
+{
+    <center>
+        <img src="/Online Review-pana.svg" width="450" />
+        <code>@message</code>
+    </center>
+}
+@if (ok)
+{
+    <br /><br />
+    <div class="card text-white bg-dark mb-3" style="max-width: 25rem;">
+        <div class="card-header">Exportando caso ID #@querella.Id</div>
+        <div class="card-body">
+            <h5 class="card-title">@querella.Nombre</h5>
+            <p class="card-text">el querellante de la cedula @querella.Cedula ha denunciado a la fecha de @querella.Fecha por el concepto de robo de "@querella.Descripcion" con un valor de $RD @querella.Valor efectuado en @querella.Lugar especificamente en la latitud @querella.Latitud y la longitud @querella.Longitud, las desiciones seran tomadas en la corte.</p>
+        </div>
+    </div>
+}
+@code {
+    Denuncias querella = new Denuncias();
+    robosContext db = new robosContext();
+    bool ok;
+    bool preview = true;
+    string cedula, message;
+
+    public void Next()
+    {
+        try
+        {
+            ok = false;
+            message = "";
+            var query = from r in db.Denuncias
+                        where r.Cedula == cedula
+                        select r;
+            querella = query.First();
+            ok = true;
+            preview = false;
+        }
+        catch (Exception)
+        {
+            preview = true;
+            message = "No se encontro el robo para exportar";
+        }
+    }
+}
